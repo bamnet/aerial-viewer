@@ -5,6 +5,17 @@ async function getVideo(key: string, address: string) {
   return response.json();
 }
 
+async function renderVideo(key: string, address: string) {
+  const response = await fetch(`https://aerialview.googleapis.com/v1beta/videos:renderVideo?key=${key}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ address: address }),
+  });
+  return response.json();
+}
+
 async function getVideoClickHandler() {
   const apiKeyElem = document.getElementById('apikey')! as HTMLInputElement;
   const addrElem = document.getElementById('address')! as HTMLInputElement;
@@ -13,8 +24,7 @@ async function getVideoClickHandler() {
   const address = addrElem.value;
 
   const response = await getVideo(apiKey, address);
-  
-  
+
   if (response.state === 'ACTIVE') {
     document.getElementById('response')!.innerHTML = `
     Video ID: ${response.metadata.videoId}
@@ -38,9 +48,31 @@ async function getVideoClickHandler() {
     </tbody>
     </table>
     `
+  } else if (response.state === 'PROCESSING') {
+    document.getElementById('response')!.innerHTML = `Processing Video ID: ${response.metadata.videoId}`;
   } else {
-    console.log("We have a problem");
+    document.getElementById('response')!.innerHTML = `HTTP ${response.error.code} - ${response.error.status}. ${response.error.message}`;
+    if (response.error.code === 404) {
+      document.getElementById('renderVideo')?.classList.remove('hidden');
+    }
   }
 }
 
+async function renderVideoClickHandler() {
+  const apiKeyElem = document.getElementById('apikey')! as HTMLInputElement;
+  const addrElem = document.getElementById('address')! as HTMLInputElement;
+
+  const apiKey = apiKeyElem.value;
+  const address = addrElem.value;
+
+  const response = await renderVideo(apiKey, address);
+  if (response.state === 'PROCESSING') {
+    document.getElementById('response')!.innerHTML = `Processing Video ID: ${response.metadata.videoId}`;
+  } else {
+    console.log(response);
+  }
+}
+
+
 document.getElementById('getVideo')!.addEventListener('click', getVideoClickHandler);
+document.getElementById('renderVideo')!.addEventListener('click', renderVideoClickHandler);
