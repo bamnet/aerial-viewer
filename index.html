@@ -4,10 +4,28 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + TS</title>
+    <title>Aerial View(er)</title>
   </head>
   <body>
-    <div id="app"></div>
+    <div id="app" class="w-full">
+      <div class="mb-4 w-96">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="apikey">
+          API Key
+        </label>
+        <input id="apikey" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="text" placeholder="Alza...">
+      </div>
+      <div class="mb-4 w-96">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="address">
+          Address
+        </label>
+        <input id="address" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="text" placeholder="Alza...">
+      </div>
+      <button id="getVideo" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
+        Get Video
+      </button>
+      <div id="response" class="w-full">
+      </div>
+    </div>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>
